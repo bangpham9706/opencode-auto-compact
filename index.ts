@@ -12,7 +12,9 @@ const LOG_FILE = "/tmp/opencode/auto-compact.log"
 
 const log = (...args: unknown[]) => {
   try {
-    appendFileSync(LOG_FILE, `[${new Date().toISOString()}] ${args.join(" ")}\n`)
+    const fmt = (a: unknown) =>
+      typeof a === "object" && a !== null ? JSON.stringify(a) : String(a)
+    appendFileSync(LOG_FILE, `[${new Date().toISOString()}] ${args.map(fmt).join(" ")}\n`)
   } catch {
     // logging must never break the plugin
   }
